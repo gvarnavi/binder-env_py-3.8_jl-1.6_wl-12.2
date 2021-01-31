@@ -5,3 +5,7 @@ dependencies:
   - scipy
   - matplotlib
   - numba
+  - rise
+  - pip
+  - pip:
+    - wolframclient
