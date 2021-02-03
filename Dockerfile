@@ -116,8 +116,9 @@ RUN mkdir -p ${JULIA_DEPOT_PATH} && \
     chown ${NB_USER}:${NB_USER} ${JULIA_DEPOT_PATH} && \
     chown -R ${NB_USER}:${NB_USER} ${REPO_DIR}
 
+# Note JSON, ZMQ, LinearAlgebra required for WL ExternalEvaluate
 USER ${NB_USER}
-RUN JULIA_PROJECT="" julia -e "using Pkg; Pkg.add(\"IJulia\"); using IJulia; installkernel(\"Julia\", \"--project=${REPO_DIR}\");" && \
+RUN JULIA_PROJECT="" julia -e "using Pkg; Pkg.add([\"IJulia\",\"JSON\",\"ZMQ\",\"LinearAlgebra\"]); using IJulia; installkernel(\"Julia\", \"--project=${REPO_DIR}\");" && \
 julia --project=${REPO_DIR} -e 'using Pkg; Pkg.instantiate(); pkg"precompile"'
 
 # ---- WOLFRAM ENGINE ----
