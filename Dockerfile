@@ -73,6 +73,9 @@ ENV KERNEL_PYTHON_PREFIX ${NB_PYTHON_PREFIX}
 ENV JULIA_PATH ${APP_BASE}/julia
 ENV JULIA_DEPOT_PATH ${JULIA_PATH}/pkg
 
+# PyCall env variable
+ENV PYTHON ${NB_PYTHON_PREFIX}/bin/python
+
 ENV PATH ${NB_PYTHON_PREFIX}/bin:${CONDA_DIR}/bin:${JULIA_PATH}/bin:${PATH}
 
 # Copy build scripts
@@ -118,7 +121,7 @@ RUN mkdir -p ${JULIA_DEPOT_PATH} && \
 
 # Note JSON, ZMQ required for WL ExternalEvaluate
 USER ${NB_USER}
-RUN JULIA_PROJECT="" julia -e "using Pkg; Pkg.add([\"IJulia\",\"JSON\",\"ZMQ\"]); using IJulia; installkernel(\"Julia\", \"--project=${REPO_DIR}\");" && \
+RUN JULIA_PROJECT="" julia -e "using Pkg; Pkg.add([\"IJulia\", \"PyCall\", \"JSON\",\"ZMQ\"]); using IJulia; installkernel(\"Julia\", \"--project=${REPO_DIR}\");" && \
 julia --project=${REPO_DIR} -e 'using Pkg; Pkg.instantiate(); pkg"precompile"'
 
 # ---- WOLFRAM ENGINE ----
